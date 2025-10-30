@@ -12,15 +12,17 @@ const Contact = () => {
     name: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -40,7 +42,7 @@ const Contact = () => {
         name: "",
         email: "",
         subject: "",
-        message: ""
+        message: "",
       });
       setIsSubmitting(false);
     }, 1000);
@@ -50,21 +52,21 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      content: "contacto@elventarron.com",
-      link: "mailto:contacto@elventarron.com"
+      content: "insurrectos@elventarron.com",
+      link: "mailto:insurrectos@elventarron.com",
     },
     {
       icon: Phone,
       title: "Teléfono",
       content: "+58 412 345 6789",
-      link: "tel:+584123456789"
+      link: "tel:+584123456789",
     },
     {
       icon: MapPin,
       title: "Ubicación",
       content: "Maracaibo, Venezuela",
-      link: null
-    }
+      link: null,
+    },
   ];
 
   return (
@@ -78,7 +80,8 @@ const Contact = () => {
             </span>
           </h1>
           <p className="text-xl sm:text-2xl text-foreground-secondary leading-relaxed">
-            Estamos aquí para responder tus preguntas y escuchar tus comentarios sobre El Ventarrón.
+            Estamos aquí para responder tus preguntas y escuchar tus comentarios
+            sobre El Ventarrón.
           </p>
         </div>
       </section>
@@ -95,7 +98,10 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="name"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Nombre *
                     </label>
                     <Input
@@ -111,7 +117,10 @@ const Contact = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="email"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Email *
                     </label>
                     <Input
@@ -128,7 +137,10 @@ const Contact = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="subject" className="text-sm font-medium text-foreground">
+                  <label
+                    htmlFor="subject"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Asunto *
                   </label>
                   <Input
@@ -144,7 +156,10 @@ const Contact = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-foreground">
+                  <label
+                    htmlFor="message"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Mensaje *
                   </label>
                   <Textarea
@@ -219,7 +234,9 @@ const Contact = () => {
               </h3>
               <div className="space-y-2 text-foreground-secondary">
                 <p>Lunes - Viernes</p>
-                <p className="font-semibold text-foreground">9:00 AM - 6:00 PM</p>
+                <p className="font-semibold text-foreground">
+                  9:00 AM - 6:00 PM
+                </p>
                 <p className="text-sm mt-4">
                   Responderemos tu mensaje en un plazo de 24-48 horas.
                 </p>
@@ -243,8 +260,9 @@ const Contact = () => {
                   ¿De dónde provienen los datos climáticos?
                 </h3>
                 <p className="text-foreground-secondary leading-relaxed">
-                  Utilizamos datos de fuentes científicas verificadas como NOAA, NASA y otros
-                  organismos internacionales dedicados al monitoreo climático.
+                  Utilizamos datos de fuentes científicas verificadas como NOAA,
+                  NASA y otros organismos internacionales dedicados al monitoreo
+                  climático.
                 </p>
               </div>
 
@@ -253,8 +271,9 @@ const Contact = () => {
                   ¿Con qué frecuencia se actualizan los datos?
                 </h3>
                 <p className="text-foreground-secondary leading-relaxed">
-                  Los datos se actualizan regularmente siguiendo los ciclos de publicación de
-                  nuestras fuentes oficiales, generalmente cada mes o trimestre.
+                  Los datos se actualizan regularmente siguiendo los ciclos de
+                  publicación de nuestras fuentes oficiales, generalmente cada
+                  mes o trimestre.
                 </p>
               </div>
 
@@ -263,8 +282,9 @@ const Contact = () => {
                   ¿Puedo usar los datos para mi investigación?
                 </h3>
                 <p className="text-foreground-secondary leading-relaxed">
-                  Sí, fomentamos el uso educativo y de investigación. Te recomendamos citar
-                  las fuentes originales de los datos en tus trabajos académicos.
+                  Sí, fomentamos el uso educativo y de investigación. Te
+                  recomendamos citar las fuentes originales de los datos en tus
+                  trabajos académicos.
                 </p>
               </div>
 
@@ -273,8 +293,9 @@ const Contact = () => {
                   ¿Cómo puedo reportar un error o sugerir una mejora?
                 </h3>
                 <p className="text-foreground-secondary leading-relaxed">
-                  Puedes usar el formulario de contacto en esta página o enviarnos un email
-                  directamente. Apreciamos todos los comentarios y sugerencias.
+                  Puedes usar el formulario de contacto en esta página o
+                  enviarnos un email directamente. Apreciamos todos los
+                  comentarios y sugerencias.
                 </p>
               </div>
             </div>
