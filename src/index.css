@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* El Ventarrón Design System - Climate Information Platform
+Scientific, modern aesthetic with dark space theme and climate accent colors
+*/
+
+@layer base {
+  :root {
+    /* Core Background Colors - Deep space theme */
+    --background: 228 100% 5%;           /* #020617 - Deep space blue */
+    --background-secondary: 228 89% 8%;  /* #071428 - Slightly lighter space */
+    --foreground: 208 100% 95%;          /* #E6F2FF - Crisp white text */
+    --foreground-secondary: 207 33% 69%; /* #9FB5C9 - Muted blue-gray text */
+
+    /* Card & Surface Colors with glassmorphism */
+    --card: 228 89% 8%;                  /* #071428 - Card background */
+    --card-foreground: 208 100% 95%;     /* #E6F2FF - Card text */
+    --glass: 228 89% 8% / 0.1;           /* Glassmorphism background */
+    --glass-border: 208 100% 95% / 0.1;  /* Glassmorphism border */
+
+    /* Popover Colors */
+    --popover: 228 89% 8%;               /* #071428 */
+    --popover-foreground: 208 100% 95%;  /* #E6F2FF */
+
+    /* Brand Colors - Climate theme */
+    --primary: 194 100% 50%;             /* #00D4FF - Bright cyan */
+    --primary-foreground: 228 100% 5%;   /* #020617 - Dark text on cyan */
+    --primary-glow: 194 100% 75%;        /* Lighter cyan for glows */
+
+    /* Secondary Accent - Teal/Green */
+    --secondary: 170 79% 55%;            /* #2EE6C4 - Bright teal */
+    --secondary-foreground: 228 100% 5%; /* #020617 - Dark text on teal */
+    --secondary-glow: 170 79% 75%;       /* Lighter teal for glows */
+
+    /* Muted Colors */
+    --muted: 228 89% 8%;                 /* #071428 */
+    --muted-foreground: 207 33% 69%;     /* #9FB5C9 */
+
+    /* Accent Colors */
+    --accent: 194 100% 50%;              /* #00D4FF - Primary cyan */
+    --accent-foreground: 228 100% 5%;    /* #020617 */
+
+    /* Utility Colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 208 100% 95%;
+    --border: 207 33% 69% / 0.2;         /* Subtle borders */
+    --input: 228 89% 8%;                 /* Input backgrounds */
+    --ring: 194 100% 50%;                /* Focus rings */
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(194 100% 50%), hsl(170 79% 55%));
+    --gradient-hero: linear-gradient(180deg, hsl(228 100% 5%), hsl(228 89% 8%));
+    --gradient-glass: linear-gradient(135deg, hsl(228 89% 8% / 0.1), hsl(207 33% 69% / 0.05));
+
+    /* Shadows & Glows */
+    --shadow-glow-primary: 0 0 40px hsl(194 100% 50% / 0.3);
+    --shadow-glow-secondary: 0 0 40px hsl(170 79% 55% / 0.3);
+    --shadow-glass: 0 8px 32px hsl(228 100% 5% / 0.3);
+
+    /* Animation & Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-glow: box-shadow 0.3s ease, transform 0.3s ease;
+
+    --radius: 1rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Glassmorphism utilities */
+  .glass {
+    background: var(--gradient-glass);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: var(--shadow-glow-primary);
+  }
+  
+  .glow-secondary {
+    box-shadow: var(--shadow-glow-secondary);
+  }
+
+  /* Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-rotate-slow {
+    animation: rotate-slow 120s linear infinite;
+  }
+
+  .animate-particles {
+    animation: particles 20s linear infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes particles {
+    0% { transform: translateX(-100vw); }
+    100% { transform: translateX(100vw); }
+  }
+
+  @keyframes pulse-glow {
+    0% { box-shadow: var(--shadow-glow-primary); }
+    100% { box-shadow: var(--shadow-glow-primary), 0 0 80px hsl(194 100% 50% / 0.4); }
+  }
+
+  /* Hero button variants */
+  .btn-hero {
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    transition: var(--transition-glow);
+    border-radius: var(--radius);
+  }
+
+  .btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-primary);
+  }
+}
