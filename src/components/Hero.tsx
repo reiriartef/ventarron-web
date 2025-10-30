@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import ClimateIcons from "./ClimateIcons";
 import PlanetLogo from "./PlanetLogo";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
-    <section 
-      id="inicio" 
+    <section
+      id="inicio"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Climate Icons Animation */}
@@ -29,18 +31,19 @@ const Hero = () => {
                 Información climática para entender nuestro planeta
               </span>
             </h1>
-            
+
             <p className="text-xl sm:text-2xl text-foreground-secondary max-w-2xl mx-auto leading-relaxed">
-              Visualiza, compara y explora datos climáticos con mapas y gráficas interactivas.
+              Visualiza, compara y explora datos climáticos con mapas y gráficas
+              interactivas.
             </p>
           </div>
 
           {/* CTA Button */}
           <div className="pt-8">
-            <Button 
+            <Button
               size="lg"
               className="btn-hero px-8 py-4 text-lg font-semibold animate-pulse-glow"
-              onClick={() => document.getElementById('mapamundi')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => navigate("/mapamundi")}
             >
               Explora el clima ahora
             </Button>
