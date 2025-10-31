@@ -32,12 +32,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
+          <a href="/" className="flex items-center space-x-3">
             <img src="/logo.png" alt="Logo Ventarron" className="max-w-16" />
             <span className="text-foreground font-semibold text-xl hidden sm:block">
               El Ventarrón
             </span>
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">

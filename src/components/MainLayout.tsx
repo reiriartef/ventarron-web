@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ChatWidget from "@/components/ChatWidget";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
 interface MainLayoutProps {
@@ -34,6 +35,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <main className="min-h-screen">{children}</main>
         <Footer />
       </div>
+      <ChatWidget />
     </div>
   );
 };
