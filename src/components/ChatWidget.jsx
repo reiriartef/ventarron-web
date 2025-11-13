@@ -86,7 +86,7 @@ const ChatWidget = () => {
 
     try {
       const response = await fetch(
-        "https://lordcdev.app.n8n.cloud/webhook/3ef60744-bf45-4e1e-8842-5a447399519f/chat",
+        "https://lordcdev29.app.n8n.cloud/webhook/a0883180-0b5d-4f8b-b496-d696511b84ae/chat",
         {
           method: "POST",
           headers: {
@@ -127,7 +127,7 @@ const ChatWidget = () => {
       {!open && (
         <button
           type="button"
-          className="p-3 hover:scale-110 transition-all duration-300 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full border-2 border-primary/40 backdrop-blur-sm shadow-lg hover:shadow-[0_0_30px_rgba(0,212,255,0.6)]"
+          className="p-3 hover:scale-110 transition-all duration-300 bg-[#1a1f2e] rounded-full border-2 border-primary/40 shadow-lg hover:shadow-[0_0_30px_rgba(0,212,255,0.6)]"
           onClick={() => setOpen(true)}
           aria-label="Abrir chat climático"
         >
@@ -141,10 +141,10 @@ const ChatWidget = () => {
 
       {/* Ventana del chat - solo visible cuando está abierto */}
       {open && (
-        <div className="fixed bottom-0 right-0 lg:bottom-4 lg:right-4 z-50 w-full sm:w-[28rem] lg:w-[32rem] h-[90vh] sm:h-auto sm:max-h-[600px] max-w-2xl bg-[#020617]/95 sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border-2 border-primary/30 backdrop-blur-xl">
+        <div className="fixed bottom-0 right-0 lg:bottom-4 lg:right-4 z-50 w-full sm:w-[28rem] lg:w-[32rem] h-[90vh] sm:h-auto sm:max-h-[600px] max-w-2xl bg-[#020617] sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border-2 border-primary/30">
           {/* Header */}
           <div className="relative flex items-center px-4 py-3 gap-3 bg-[#020617]">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 p-2 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-[#1a1f2e] p-2 flex items-center justify-center border border-primary/30">
               <img
                 src="/logo.png"
                 alt="El Ventarrón"
@@ -181,7 +181,7 @@ const ChatWidget = () => {
                 <button
                   key={idx}
                   type="button"
-                  className="bg-primary/10 text-primary text-xs px-3 py-1.5 rounded-full font-medium hover:bg-primary/20 hover:scale-105 transition-all border border-primary/30 backdrop-blur-sm"
+                  className="bg-[#1a1f2e] text-primary text-xs px-3 py-1.5 rounded-full font-medium hover:bg-[#2a3f5f] hover:scale-105 transition-all border border-primary/30"
                   onClick={() => handleFaqClick(q)}
                 >
                   {q}
@@ -194,7 +194,7 @@ const ChatWidget = () => {
           <div className="px-4 py-3 space-y-3 overflow-y-auto h-[400px] bg-[#020617]">
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-2">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 p-3">
+                <div className="w-16 h-16 rounded-full bg-[#1a1f2e] p-3 border border-primary/30">
                   <img
                     src="/logo.png"
                     alt="El Ventarrón"
@@ -211,13 +211,15 @@ const ChatWidget = () => {
               return (
                 <div
                   key={idx}
-                  className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}
+                  className={`flex w-full ${
+                    isUser ? "justify-end" : "justify-start"
+                  }`}
                 >
                   <div
                     className={
                       isUser
                         ? "text-white bg-gradient-to-r from-primary to-secondary px-4 py-2 rounded-2xl rounded-tr-sm max-w-[85%] font-semibold shadow-md"
-                        : "text-[#E6F2FF] bg-primary/10 px-4 py-2 rounded-2xl rounded-tl-sm max-w-[85%] border border-primary/20 backdrop-blur-sm"
+                        : "text-[#E6F2FF] bg-[#1a1f2e] px-4 py-2 rounded-2xl rounded-tl-sm max-w-[85%] border border-primary/20"
                     }
                   >
                     {msg.text}
@@ -227,7 +229,7 @@ const ChatWidget = () => {
             })}
             {isTyping && (
               <div className="flex justify-start">
-                <div className="text-[#E6F2FF] bg-primary/10 px-4 py-3 rounded-2xl rounded-tl-sm border border-primary/20 backdrop-blur-sm">
+                <div className="text-[#E6F2FF] bg-[#1a1f2e] px-4 py-3 rounded-2xl rounded-tl-sm border border-primary/20">
                   <div className="flex space-x-1.5">
                     <div
                       className="w-2 h-2 bg-primary rounded-full animate-bounce"
@@ -257,8 +259,7 @@ const ChatWidget = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 px-4 py-2.5 rounded-full border border-primary/30 bg-white/95 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder-gray-500 transition-all"
-              style={{ color: '#000000' }}
+              className="flex-1 px-4 py-2.5 rounded-full border border-primary/30 bg-[#f8f9fa] text-black focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder-gray-600 transition-all"
               placeholder="Pregunta sobre el clima..."
             />
             <button

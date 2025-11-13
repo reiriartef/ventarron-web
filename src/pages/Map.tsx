@@ -9,7 +9,17 @@ import {
 import { Tooltip } from "react-tooltip";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Thermometer, Cloud, Droplets, Wind, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
+import {
+  Thermometer,
+  Cloud,
+  Droplets,
+  Wind,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { fetchAllCitiesClimate, estimateCO2 } from "@/services/climateApi";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
@@ -21,6 +31,10 @@ const Map = () => {
   const [hoveredCity, setHoveredCity] = useState<number | null>(null);
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
   const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
+
+  // Estado para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Importar servicios de clima
 
@@ -144,8 +158,33 @@ const Map = () => {
     setPosition({ coordinates: [0, 0], zoom: 1 });
   };
 
-  const handleMoveEnd = (newPosition: { coordinates: number[]; zoom: number }) => {
+  const handleMoveEnd = (newPosition: {
+    coordinates: number[];
+    zoom: number;
+  }) => {
     setPosition(newPosition);
+  };
+
+  // Lógica de paginación
+  const totalPages = Math.ceil(climateData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = climateData.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
@@ -278,7 +317,8 @@ const Map = () => {
                 <Geographies geography={geoUrl}>
                   {({ geographies }) =>
                     geographies.map((geo) => {
-                      const countryName = geo.properties.name || "País desconocido";
+                      const countryName =
+                        geo.properties.name || "País desconocido";
                       return (
                         <Geography
                           key={geo.rsmKey}
@@ -290,7 +330,11 @@ const Map = () => {
                           onMouseLeave={() => setHoveredCountry(null)}
                           style={{
                             default: { outline: "none" },
-                            hover: { outline: "none", fill: "#2a3f5f", cursor: "pointer" },
+                            hover: {
+                              outline: "none",
+                              fill: "#2a3f5f",
+                              cursor: "pointer",
+                            },
                             pressed: { outline: "none" },
                           }}
                           data-tooltip-id="country-tooltip"
@@ -301,33 +345,33 @@ const Map = () => {
                   }
                 </Geographies>
 
-              {climateData.map((location) => {
-                const value = currentLayerInfo.getValue(location);
-                const color = getMarkerColor(value);
-                const baseSize = getMarkerSize(value);
-                // Escalar el tamaño inversamente con el zoom para mantener tamaño visual consistente
-                const size = baseSize / position.zoom;
-                const strokeWidth = 2 / position.zoom;
+                {climateData.map((location) => {
+                  const value = currentLayerInfo.getValue(location);
+                  const color = getMarkerColor(value);
+                  const baseSize = getMarkerSize(value);
+                  // Escalar el tamaño inversamente con el zoom para mantener tamaño visual consistente
+                  const size = baseSize / position.zoom;
+                  const strokeWidth = 2 / position.zoom;
 
-                return (
-                  <Marker
-                    key={location.id}
-                    coordinates={location.coordinates}
-                    onMouseEnter={() => setHoveredCity(location.id)}
-                    onMouseLeave={() => setHoveredCity(null)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <circle
-                      r={size}
-                      fill={color}
-                      stroke="#fff"
-                      strokeWidth={strokeWidth}
-                      fillOpacity={hoveredCity === location.id ? 0.9 : 0.6}
-                      style={{
-                        transition: "all 0.2s ease",
-                      }}
-                      data-tooltip-id="city-tooltip"
-                      data-tooltip-html={`
+                  return (
+                    <Marker
+                      key={location.id}
+                      coordinates={location.coordinates}
+                      onMouseEnter={() => setHoveredCity(location.id)}
+                      onMouseLeave={() => setHoveredCity(null)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <circle
+                        r={size}
+                        fill={color}
+                        stroke="#fff"
+                        strokeWidth={strokeWidth}
+                        fillOpacity={hoveredCity === location.id ? 0.9 : 0.6}
+                        style={{
+                          transition: "all 0.2s ease",
+                        }}
+                        data-tooltip-id="city-tooltip"
+                        data-tooltip-html={`
                         <div style="padding: 8px; min-width: 200px;">
                           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: bold; font-size: 16px;">
                             <span>${location.city}, ${location.country}</span>
@@ -352,25 +396,25 @@ const Map = () => {
                           </div>
                         </div>
                       `}
-                    />
-                    {hoveredCity === location.id && (
-                      <text
-                        textAnchor="middle"
-                        y={-size - 5 / position.zoom}
-                        style={{
-                          fontFamily: "system-ui",
-                          fill: "#fff",
-                          fontSize: 12 / position.zoom,
-                          fontWeight: "bold",
-                          pointerEvents: "none",
-                        }}
-                      >
-                        {location.city}
-                      </text>
-                    )}
-                  </Marker>
-                );
-              })}
+                      />
+                      {hoveredCity === location.id && (
+                        <text
+                          textAnchor="middle"
+                          y={-size - 5 / position.zoom}
+                          style={{
+                            fontFamily: "system-ui",
+                            fill: "#fff",
+                            fontSize: 12 / position.zoom,
+                            fontWeight: "bold",
+                            pointerEvents: "none",
+                          }}
+                        >
+                          {location.city}
+                        </text>
+                      )}
+                    </Marker>
+                  );
+                })}
               </ZoomableGroup>
             </ComposableMap>
           </div>
@@ -575,7 +619,7 @@ const Map = () => {
                 </tr>
               </thead>
               <tbody>
-                {climateData.map((location) => (
+                {currentItems.map((location) => (
                   <tr
                     key={location.id}
                     className="border-b border-border/50 hover:bg-primary/5 transition-colors"
@@ -599,6 +643,56 @@ const Map = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Controles de paginación */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between mt-6">
+              <div className="text-sm text-foreground-secondary">
+                Mostrando {startIndex + 1}-
+                {Math.min(endIndex, climateData.length)} de {climateData.length}{" "}
+                ciudades
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft size={16} className="mr-1" />
+                  Anterior
+                </Button>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePageChange(page)}
+                        className={
+                          currentPage === page ? "bg-gradient-primary" : ""
+                        }
+                      >
+                        {page}
+                      </Button>
+                    )
+                  )}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                >
+                  Siguiente
+                  <ChevronRight size={16} className="ml-1" />
+                </Button>
+              </div>
+            </div>
+          )}
         </Card>
       </section>
     </div>
