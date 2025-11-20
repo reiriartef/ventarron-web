@@ -141,9 +141,12 @@ const ChatWidget = () => {
 
       {/* Ventana del chat - solo visible cuando está abierto */}
       {open && (
-        <div className="fixed bottom-0 right-0 lg:bottom-4 lg:right-4 z-50 w-full sm:w-[28rem] lg:w-[32rem] h-[90vh] sm:h-auto sm:max-h-[600px] max-w-2xl bg-[#020617] sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border-2 border-primary/30">
+        <div
+          className="fixed bottom-0 right-0 lg:bottom-4 lg:right-4 z-50 w-full sm:w-[28rem] lg:w-[32rem] h-[90vh] sm:h-auto sm:max-h-[600px] max-w-2xl  sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border-2 border-primary/30"
+          style={{ backgroundColor: "#020617" }}
+        >
           {/* Header */}
-          <div className="relative flex items-center px-4 py-3 gap-3 bg-[#020617]">
+          <div className="relative flex items-center px-4 py-3 gap-3">
             <div className="w-10 h-10 rounded-full bg-[#1a1f2e] p-2 flex items-center justify-center border border-primary/30">
               <img
                 src="/logo.png"
