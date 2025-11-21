@@ -30,7 +30,7 @@ const AnimatedBackground = () => {
     const createParticles = () => {
       const particles: Particle[] = [];
       // Reduce particle count if user prefers reduced motion
-      const particleCount = prefersReducedMotion 
+      const particleCount = prefersReducedMotion
         ? Math.floor((canvas.width * canvas.height) / 30000)
         : Math.floor((canvas.width * canvas.height) / 15000);
 

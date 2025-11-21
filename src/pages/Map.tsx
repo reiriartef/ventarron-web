@@ -19,6 +19,9 @@ import {
   RotateCcw,
   ChevronLeft,
   ChevronRight,
+  Search,
+  Snowflake,
+  Flame,
 } from "lucide-react";
 import { fetchAllCitiesClimate, estimateCO2 } from "@/services/climateApi";
 
@@ -35,6 +38,12 @@ const Map = () => {
   // Estado para paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  // Estado para búsqueda
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Estado para filtro de temperatura
+  const [tempFilter, setTempFilter] = useState<"all" | "cold" | "hot">("all");
 
   // Importar servicios de clima
 
@@ -66,6 +75,11 @@ const Map = () => {
     }
     loadClimate();
   }, []);
+
+  // Resetear página cuando cambia la búsqueda o el filtro de temperatura
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, tempFilter]);
 
   if (loading) {
     return (
@@ -165,11 +179,30 @@ const Map = () => {
     setPosition(newPosition);
   };
 
-  // Lógica de paginación
-  const totalPages = Math.ceil(climateData.length / itemsPerPage);
+  // Filtrar datos según búsqueda y temperatura
+  const filteredData = climateData.filter((location) => {
+    // Filtro de búsqueda
+    const query = searchQuery.toLowerCase();
+    const matchesSearch =
+      location.city.toLowerCase().includes(query) ||
+      location.country.toLowerCase().includes(query);
+
+    // Filtro de temperatura
+    let matchesTemp = true;
+    if (tempFilter === "cold") {
+      matchesTemp = location.temperature < 15; // Países fríos: menos de 15°C
+    } else if (tempFilter === "hot") {
+      matchesTemp = location.temperature > 25; // Países calientes: más de 25°C
+    }
+
+    return matchesSearch && matchesTemp;
+  });
+
+  // Lógica de paginación con datos filtrados
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = climateData.slice(startIndex, endIndex);
+  const currentItems = filteredData.slice(startIndex, endIndex);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -207,7 +240,7 @@ const Map = () => {
       {/* Map Controls */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Card className="glass p-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center">
                 <currentLayerInfo.icon size={24} className="text-background" />
@@ -222,33 +255,99 @@ const Map = () => {
               </div>
             </div>
 
-            {/* Zoom Controls */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+              {/* Buscador */}
+              <div className="relative w-full sm:min-w-[280px] lg:min-w-[320px]">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary" size={18} />
+                <input
+                  type="text"
+                  placeholder="Buscar ciudad o país..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-10 py-2 rounded-lg border border-primary/30 bg-background text-foreground placeholder-foreground-secondary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary hover:text-foreground transition-colors text-xl leading-none"
+                    aria-label="Limpiar búsqueda"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+
+              {/* Zoom Controls */}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleZoomIn}
+                  disabled={position.zoom >= 4}
+                  title="Acercar zoom"
+                >
+                  <ZoomIn size={18} />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleZoomOut}
+                  disabled={position.zoom <= 1}
+                  title="Alejar zoom"
+                >
+                  <ZoomOut size={18} />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleReset}
+                  title="Restablecer vista"
+                >
+                  <RotateCcw size={18} />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Filtros de temperatura */}
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <span className="text-sm text-foreground-secondary font-semibold">
+              Filtrar por temperatura:
+            </span>
+            <div className="flex gap-2">
               <Button
-                variant="outline"
-                size="icon"
-                onClick={handleZoomIn}
-                disabled={position.zoom >= 4}
-                title="Acercar zoom"
+                variant={tempFilter === "all" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTempFilter("all")}
+                className={tempFilter === "all" ? "bg-gradient-primary" : ""}
               >
-                <ZoomIn size={18} />
+                Todos
               </Button>
               <Button
-                variant="outline"
-                size="icon"
-                onClick={handleZoomOut}
-                disabled={position.zoom <= 1}
-                title="Alejar zoom"
+                variant={tempFilter === "cold" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTempFilter("cold")}
+                className={
+                  tempFilter === "cold"
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600"
+                    : ""
+                }
               >
-                <ZoomOut size={18} />
+                <Snowflake size={16} className="mr-1" />
+                Fríos (&lt; 15°C)
               </Button>
               <Button
-                variant="outline"
-                size="icon"
-                onClick={handleReset}
-                title="Restablecer vista"
+                variant={tempFilter === "hot" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTempFilter("hot")}
+                className={
+                  tempFilter === "hot"
+                    ? "bg-gradient-to-r from-red-500 to-orange-500"
+                    : ""
+                }
               >
-                <RotateCcw size={18} />
+                <Flame size={16} className="mr-1" />
+                Calientes (&gt; 25°C)
               </Button>
             </div>
           </div>
@@ -345,7 +444,7 @@ const Map = () => {
                   }
                 </Geographies>
 
-                {climateData.map((location) => {
+                {filteredData.map((location) => {
                   const value = currentLayerInfo.getValue(location);
                   const color = getMarkerColor(value);
                   const baseSize = getMarkerSize(value);
@@ -619,27 +718,35 @@ const Map = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentItems.map((location) => (
-                  <tr
-                    key={location.id}
-                    className="border-b border-border/50 hover:bg-primary/5 transition-colors"
-                  >
-                    <td className="py-3 text-foreground">{location.city}</td>
-                    <td className="py-3 text-foreground-secondary">
-                      {location.country}
+                {currentItems.length > 0 ? (
+                  currentItems.map((location) => (
+                    <tr
+                      key={location.id}
+                      className="border-b border-border/50 hover:bg-primary/5 transition-colors"
+                    >
+                      <td className="py-3 text-foreground">{location.city}</td>
+                      <td className="py-3 text-foreground-secondary">
+                        {location.country}
+                      </td>
+                      <td className="py-3 text-foreground">
+                        {location.temperature}°C
+                      </td>
+                      <td className="py-3 text-foreground">
+                        {location.precipitation} mm
+                      </td>
+                      <td className="py-3 text-foreground">
+                        {location.wind} km/h
+                      </td>
+                      <td className="py-3 text-foreground">{location.co2} ppm</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="py-8 text-center text-foreground-secondary">
+                      No se encontraron resultados para "{searchQuery}"
                     </td>
-                    <td className="py-3 text-foreground">
-                      {location.temperature}°C
-                    </td>
-                    <td className="py-3 text-foreground">
-                      {location.precipitation} mm
-                    </td>
-                    <td className="py-3 text-foreground">
-                      {location.wind} km/h
-                    </td>
-                    <td className="py-3 text-foreground">{location.co2} ppm</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -649,7 +756,7 @@ const Map = () => {
             <div className="flex items-center justify-between mt-6">
               <div className="text-sm text-foreground-secondary">
                 Mostrando {startIndex + 1}-
-                {Math.min(endIndex, climateData.length)} de {climateData.length}{" "}
+                {Math.min(endIndex, filteredData.length)} de {filteredData.length}{" "}
                 ciudades
               </div>
               <div className="flex items-center gap-2">

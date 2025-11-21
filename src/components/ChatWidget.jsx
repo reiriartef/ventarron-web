@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
 
 const ChatWidget = () => {
   const [open, setOpen] = useState(false);
@@ -38,7 +39,7 @@ const ChatWidget = () => {
 
     try {
       const response = await fetch(
-        "https://lordcdev.app.n8n.cloud/webhook/3ef60744-bf45-4e1e-8842-5a447399519f/chat",
+        "https://lordcdev29.app.n8n.cloud/webhook/a0883180-0b5d-4f8b-b496-d696511b84ae/chat",
         {
           method: "POST",
           headers: {
@@ -52,10 +53,14 @@ const ChatWidget = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to get response from chat");
+        console.error("Response not OK:", response.status, response.statusText);
+        throw new Error(
+          `Server responded with ${response.status}: ${response.statusText}`
+        );
       }
 
       const data = await response.json();
+      console.log("Response data:", data);
       setMessages((prev) => [...prev, { from: "bot", text: data.output }]);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -222,10 +227,47 @@ const ChatWidget = () => {
                     className={
                       isUser
                         ? "text-white bg-gradient-to-r from-primary to-secondary px-4 py-2 rounded-2xl rounded-tr-sm max-w-[85%] font-semibold shadow-md"
-                        : "text-[#E6F2FF] bg-[#1a1f2e] px-4 py-2 rounded-2xl rounded-tl-sm max-w-[85%] border border-primary/20"
+                        : "text-[#E6F2FF] bg-[#1a1f2e] px-4 py-2 rounded-2xl rounded-tl-sm max-w-[85%] border border-primary/20 markdown-content"
                     }
                   >
-                    {msg.text}
+                    {isUser ? (
+                      msg.text
+                    ) : (
+                      <ReactMarkdown
+                        components={{
+                          ul: ({ node, ...props }) => (
+                            <ul className="list-disc list-inside my-2 space-y-1" {...props} />
+                          ),
+                          ol: ({ node, ...props }) => (
+                            <ol className="list-decimal list-inside my-2 space-y-1" {...props} />
+                          ),
+                          li: ({ node, ...props }) => (
+                            <li className="ml-2" {...props} />
+                          ),
+                          p: ({ node, ...props }) => (
+                            <p className="my-1" {...props} />
+                          ),
+                          strong: ({ node, ...props }) => (
+                            <strong className="font-bold text-primary" {...props} />
+                          ),
+                          em: ({ node, ...props }) => (
+                            <em className="italic" {...props} />
+                          ),
+                          code: ({ node, inline, ...props }) => (
+                            inline ? (
+                              <code className="bg-[#0a1929] px-1.5 py-0.5 rounded text-secondary font-mono text-sm" {...props} />
+                            ) : (
+                              <code className="block bg-[#0a1929] p-2 rounded my-2 font-mono text-sm overflow-x-auto" {...props} />
+                            )
+                          ),
+                          a: ({ node, ...props }) => (
+                            <a className="text-primary hover:text-secondary underline" target="_blank" rel="noopener noreferrer" {...props} />
+                          ),
+                        }}
+                      >
+                        {msg.text}
+                      </ReactMarkdown>
+                    )}
                   </div>
                 </div>
               );
@@ -262,7 +304,12 @@ const ChatWidget = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 px-4 py-2.5 rounded-full border border-primary/30 bg-[#f8f9fa] text-black focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder-gray-600 transition-all"
+              className="flex-1 px-4 py-2.5 rounded-full border border-primary/30 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+              style={{
+                backgroundColor: "#f8f9fa",
+                color: "#1a1f2e",
+                caretColor: "#1a1f2e",
+              }}
               placeholder="Pregunta sobre el clima..."
             />
             <button
